@@ -12,4 +12,14 @@ class Trie() {
     for (c <- s if current.nonEmpty) current = current.get.children.get(c)
     current.exists(_.HasValue)
   }
+  def prefixesMatching0(s: String): Set[Int] = {
+    var current = Option(root)
+    val output = Set.newBuilder[Int]
+    for ((c, i) <- s.zipWithIndex if current.nonEmpty) {
+      if (current.get.HasValue) output += i
+      current = current.get.children.get(c)
+    }
+    if (current.exists(_.HasValue)) output += s.length
+    output.result()
+  }
 }
