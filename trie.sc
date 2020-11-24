@@ -22,4 +22,21 @@ class Trie() {
     if (current.exists(_.HasValue)) output += s.length
     output.result()
   }
+  def prefixesMatchingString(s: String): Set[String] = {
+    prefixesMatching0(s).map(s.substring(0, _))
+  }
+  def stringsMatchingPrefix(s: String): Set[String] = {
+    var current = Option(root)
+    for (c <- s if current.nonEmpty) current = current.get.children.get(c)
+    if (current.isEmpty) Set()
+    else {
+      val output = Set.newBuilder[String]
+      def recurse(current: Node, path: List[Char]): Unit = {
+        if (current.HasValue) output += (s + path.reverse.mkString)
+        for ((c, n) <- current.children) recurse(n, c :: path)
+      }
+      recurse(current.get, Nil)
+      output.result()
+    }
+  }
 }
